@@ -1,0 +1,27 @@
+WITH CTE1 
+AS
+(
+SELECT account_id , 
+       SUM(amount) as total
+FROM transactions
+WHERE transaction_type = 'Deposit'
+GROUP BY account_id
+),
+CTE2 
+AS 
+(
+SELECT account_id ,
+       SUM(amount) as take
+FROM transactions
+WHERE transaction_type = 'Withdrawal'
+GROUP BY account_id 
+)
+
+SELECT CTE1.account_id,
+       total - take as final_balance
+FROM CTE1 
+JOIN CTE2 
+ON CTE1.account_id = CTE2.account_id 
+
+
+
