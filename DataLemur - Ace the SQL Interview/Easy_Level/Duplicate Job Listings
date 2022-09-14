@@ -1,0 +1,16 @@
+
+SELECT COUNT(DISTINCT sub.company_id) as  duplicate_companies
+FROM
+(
+  SELECT company_id,
+         title,
+         description,
+         COUNT(*)
+  FROM job_listings
+  GROUP BY company_id,
+         title,
+         description
+  HAVING COUNT(*) > 1
+)sub
+
+
