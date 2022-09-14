@@ -1,0 +1,15 @@
+WITH CTE 
+AS 
+(
+SELECT datacenter_id , 
+       SUM(monthly_demand) AS total 
+FROM forecasted_demand 
+GROUP BY datacenter_id
+)
+
+SELECT d.datacenter_id , 
+       monthly_capacity - COALESCE(total , 0) AS spare_capacity
+FROM datacenters  d 
+LEFT JOIN CTE c
+ON d.datacenter_id = c.datacenter_id
+ORDER BY datacenter_id
