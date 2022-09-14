@@ -1,0 +1,18 @@
+WITH CTE(user_id,total) 
+AS 
+(
+SELECT user_id,
+       COUNT(post_id)     
+FROM posts
+WHERE EXTRACT (year FROM post_date) = '2021'
+GROUP BY user_id
+HAVING COUNT(post_id) > 1 
+)
+
+SELECT user_id,  
+       DATE_PART('day' , MAX(post_date) - MIN(post_date)) AS days_between
+FROM posts
+WHERE EXTRACT(year FROM post_date) = '2021'
+AND user_id IN (SELECT user_id FROM CTE )
+GROUP BY user_id
+
