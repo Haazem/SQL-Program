@@ -1,0 +1,18 @@
+WITH last_transction 
+AS 
+(
+SELECT product_id ,
+       user_id ,
+       transaction_date,
+       RANK() OVER(PARTITION BY user_id ORDER BY transaction_date DESC) no
+FROM user_transactions  
+)
+
+
+SELECT transaction_date ,
+       COUNT(DISTINCT user_id)      AS number_of_users,
+       COUNT(DISTINCT product_id)   AS number_of_products
+      
+FROM last_transction
+WHERE no = 1
+GROUP BY transaction_date
