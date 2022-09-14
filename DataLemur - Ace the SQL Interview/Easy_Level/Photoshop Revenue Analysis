@@ -1,0 +1,20 @@
+SELECT 
+  og.customer_id,
+  og.product,
+  og.revenue,
+  filtered.customer_id,
+  filtered.product,
+  filtered.revenue
+FROM adobe_transactions AS og
+JOIN adobe_transactions AS filtered
+  ON og.customer_id = filtered.customer_id
+  AND filtered.product = 'Photoshop'
+WHERE og.product <> 'Photoshop'
+ORDER BY og.customer_id;
+
+
+
+
+
+
+
