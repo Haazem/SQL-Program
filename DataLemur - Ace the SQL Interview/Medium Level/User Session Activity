@@ -1,0 +1,20 @@
+WITH CTE 
+AS (
+SELECT user_id,
+       session_type,
+       SUM(duration) as total
+FROM sessions
+WHERE CAST(start_date AS DATE) >= '2022-01-01'
+AND   CAST(start_date AS DATE) <= '2022-02-01'
+GROUP BY user_id ,
+         session_type)
+         
+
+SELECT user_id , 
+       session_type,
+       RANK() OVER(PARTITION BY session_type 
+                  ORDER BY total DESC) AS ranking  
+                                                    
+FROM CTE 
+
+         
