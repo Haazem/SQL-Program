@@ -1,0 +1,7 @@
+SELECT COUNT(DISTINCT business_id) AS cnt,
+       ROUND(
+       COUNT(DISTINCT business_id)*1.0/ 
+       (SELECT COUNT(business_id)
+        FROM reviews) * 100.0 , 2) as top_business_pct
+FROM reviews
+WHERE review_stars >= 4 
