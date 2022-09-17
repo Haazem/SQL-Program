@@ -1,7 +1,10 @@
-SELECT ROUND(COUNT(DISTINCT s.user_id)*1.0 / COUNT(s.user_id)*100.0,2)
+SELECT ROUND(COUNT(DISTINCT s.user_id)*1.0 / 
+       (SELECT COUNT(user_id) FROM signups)*100.0,2)
        AS single_purchase_pct
 FROM signups s 
 JOIN user_purchases u   
 ON s.user_id = u.user_id 
-WHERE CAST(purchase_date AS DATE) -
-      CAST(signup_date AS DATE) <= 7 
+WHERE (purchase_date BETWEEN signup_date 
+       AND(signup_date + '1 week'::INTERVAL))
+       
+       
