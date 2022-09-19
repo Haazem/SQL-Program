@@ -1,0 +1,15 @@
+
+WITH CTE 
+AS (
+SELECT user_id , 
+       CASE WHEN texts.email_id IS NOT NULL THEN 1
+            ELSE 0 END AS confirmed 
+FROM emails 
+LEFT JOIN texts 
+ON  texts.email_id = emails.email_id 
+AND signup_action = 'Confirmed'
+)
+
+SELECT ROUND(SUM(confirmed)::DECIMAL / COUNT(user_id) , 2)
+AS confirm_rate
+FROM CTE 
