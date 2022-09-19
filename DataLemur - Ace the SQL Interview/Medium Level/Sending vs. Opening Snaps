@@ -1,0 +1,22 @@
+WITH CTE 
+AS (
+SELECT age_bucket,
+       SUM(CASE WHEN activity_type = 'open' THEN time_spent
+                ELSE 0 END ) AS open,
+        SUM(CASE WHEN activity_type = 'send' THEN time_spent
+                 ELSE 0 END ) AS send 
+FROM activities x 
+JOIN age_breakdown y 
+ON x.user_id = y.user_id 
+GROUP BY age_bucket
+)
+
+SELECT age_bucket,
+       CAST(send / (send + open) * 100.0 AS DECIMAL(10,2)) AS send_perc,
+       CAST(open / (send + open) * 100.0 AS DECIMAL(10,2)) AS open_perc
+       
+FROM CTE 
+
+
+
+
