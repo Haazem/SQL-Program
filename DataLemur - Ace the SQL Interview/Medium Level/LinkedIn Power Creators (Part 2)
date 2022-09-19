@@ -1,0 +1,17 @@
+WITH CTE 
+AS 
+(
+  SELECT e.personal_profile_id ,
+         MAX(c.followers) as company_followers
+  FROM employee_company e  
+  LEFT JOIN company_pages c 
+  ON c.company_id = e.company_id 
+  GROUP BY e.personal_profile_id )
+  
+  
+SELECT DISTINCT CTE.personal_profile_id
+FROM personal_profiles p 
+LEFT JOIN CTE 
+ON p.profile_id = CTE.personal_profile_id
+WHERE p.followers > CTE.company_followers
+ORDER BY CTE.personal_profile_id
