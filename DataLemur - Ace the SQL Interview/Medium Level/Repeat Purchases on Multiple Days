@@ -1,0 +1,12 @@
+WITH CTE 
+AS 
+(
+SELECT user_id ,
+       RANK() OVER(PARTITION BY user_id , product_id ORDER BY DATE(purchase_date) )
+              as row_no
+FROM purchases 
+)
+
+SELECT COUNT(DISTINCT user_id)
+FROM CTE 
+WHERE row_no = 2 
