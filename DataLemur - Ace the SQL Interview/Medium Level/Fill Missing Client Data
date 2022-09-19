@@ -1,0 +1,18 @@
+WITH CTE 
+AS (
+SELECT product_id , 
+       category,
+       name , 
+       COUNT(category) OVER( ORDER BY product_id) as category_group  
+FROM products
+)
+
+
+SELECT product_id,
+       FIRST_VALUE(category) OVER(PARTITION BY category_group ORDER BY product_id)
+       as category,
+       name
+FROM CTE
+
+
+
