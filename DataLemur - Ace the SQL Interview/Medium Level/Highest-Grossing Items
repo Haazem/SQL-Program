@@ -1,0 +1,26 @@
+WITH CTE 
+AS
+(
+SELECT  category,
+        product,
+		SUM(spend) OVER(PARTITION BY category,product ORDER BY 
+		                transaction_date) as total
+FROM product_spend
+WHERE EXTRACT('year' FROM transaction_date) = '2022'
+),
+CTE2 
+AS 
+(
+SELECT category,
+       product,
+	     total,
+	      ROW_NUMBER() OVER(PARTITION BY categorY
+	                      ORDER BY total DESC) RN
+FROM CTE
+)
+
+SELECT category, 
+	   product,
+	   total as total_spend
+FROM CTE2 
+WHERE RN  <=2 
