@@ -1,0 +1,18 @@
+
+WITH CTE 
+AS (
+SELECT CAST(measurement_time AS DATE) as meausrement_day,
+      measurement_value , 
+      Row_NUMBER() OVER(PARTITION BY CAST(measurement_time AS DATE) ORDER BY measurement_time)
+      as rn
+FROM measurements  )
+
+SELECT meausrement_day , 
+       SUM(CASE WHEN rn % 2 != 0 THEN measurement_value 
+                ELSE 0 END)   AS odd_sum,
+        SUM(CASE WHEN rn % 2 = 0 THEN measurement_value 
+                 ELSE 0 END ) AS  even_sum
+        
+FROM CTE
+GROUP BY meausrement_day
+ORDER BY meausrement_day
